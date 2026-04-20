@@ -1,13 +1,17 @@
 name: Build Flet APK
-on: [push, workflow_dispatch]
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -20,8 +24,8 @@ jobs:
 
       - name: Build APK
         run: |
-          # إضافة --yes للموافقة التلقائية وتجنب خطأ EOFError
-          flet build apk --product "حساب بلاد بارق" --yes
+          # أمر البناء مع التجاوز التلقائي لأي طلب إدخال لتجنب خطأ EOFError
+          flet build apk --product "حساب بلاد بارق" --yes --no-android-signing
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
