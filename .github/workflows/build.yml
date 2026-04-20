@@ -1,17 +1,11 @@
 name: Build Flet APK
-
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,8 +18,8 @@ jobs:
 
       - name: Build APK
         run: |
-          # أمر البناء مع التجاوز التلقائي لأي طلب إدخال لتجنب خطأ EOFError
-          flet build apk --product "حساب بلاد بارق" --yes --no-android-signing
+          # خيار --yes يحل مشكلة EOFError التي واجهتنا
+          flet build apk --product "حساب بلاد بارق" --yes
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
